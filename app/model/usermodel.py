@@ -3,10 +3,11 @@ from datetime import datetime
 from uuid import UUID, uuid4
 from beanie import Document, Indexed
 from pydantic import Field, EmailStr
+import pymongo
 
 class User(Document):
     user_id: UUID = Field(default_factory=uuid4)
-    username: Indexed(str, unique=True)
+    username: Indexed(str)
     email: Indexed(EmailStr, unique=True)
     hashed_password: str
     phone_number: Optional[str] = None 
@@ -35,5 +36,8 @@ class User(Document):
     async def by_email(self, email: str) -> "User":
         return await self.find_one(self.email == email)
     
-    class Collection:
+    # class Collection:
+    #     name = "users"
+    
+    class Settings:
         name = "users"

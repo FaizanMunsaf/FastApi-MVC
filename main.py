@@ -15,12 +15,6 @@ from app.infrastructure.dbconnection import dbConnection
 from app.router.index import router
 
 
-# extra test purpose
-from beanie import init_beanie
-from app.config.config import settings
-from motor.motor_asyncio import AsyncIOMotorClient
-from app.model.usermodel import User
-
 
 # App Configrations
 app = FastAPI(
@@ -40,14 +34,7 @@ allow_headers=["*"],
 # Connection DataBase
 @app.on_event("startup")
 async def app_init():
-    db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).islamicgpt
-    await init_beanie(
-        database=db_client,
-        document_models= [
-            User
-        ]
-    )                       
-       
+    await dbConnection()
 
 app.include_router(router, prefix=settings.API_V1_STR)
 

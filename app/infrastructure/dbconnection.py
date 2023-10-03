@@ -1,4 +1,6 @@
 
+import asyncio
+from turtle import delay
 from beanie import init_beanie
 from app.config.config import settings
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -16,7 +18,7 @@ async def dbConnection():
     """
     initialize crucial application services
     """
-
+    # await asyncio.sleep(delay)
     db_client = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING).islamicgpt
     await init_beanie(
         database=db_client,
