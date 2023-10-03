@@ -7,7 +7,7 @@ import pymongo
 
 class User(Document):
     user_id: UUID = Field(default_factory=uuid4)
-    username: Indexed(str)
+    username: str
     email: Indexed(EmailStr, unique=True)
     hashed_password: str
     phone_number: Optional[str] = None 
@@ -35,9 +35,6 @@ class User(Document):
     @classmethod
     async def by_email(self, email: str) -> "User":
         return await self.find_one(self.email == email)
-    
-    # class Collection:
-    #     name = "users"
     
     class Settings:
         name = "users"

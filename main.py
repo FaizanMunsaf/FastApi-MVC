@@ -36,19 +36,22 @@ allow_headers=["*"],
 async def app_init():
     await dbConnection()
 
+# Inculde the routers
 app.include_router(router, prefix=settings.API_V1_STR)
 
 
 # =============================
 # For Start the uvicorn Server
-async def start():
+def start():
     '''Launched with 'poetry run start' at root level '''
-    config = uvicorn.Config("main:app", port=8001, host='127.0.0.1',log_level="info", reload=False)
-    server = uvicorn.Server(config)
-    await server.serve()
+    uvicorn.run("main:app", port=8001, host='127.0.0.1',log_level="info", reload=True)
+    # config = uvicorn.Config("main:app", port=8001, host='127.0.0.1',log_level="info", reload=True)
+    # server = uvicorn.Server(config)
+    # await server.serve()
 
 
 # ============================
 # Main Function 
 if __name__ == '__main__':
-    asyncio.run(start())
+    # asyncio.run(start())
+    start()

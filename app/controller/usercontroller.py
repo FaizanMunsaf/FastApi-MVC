@@ -9,10 +9,13 @@ import pymongo
 class UserController:
     @staticmethod
     async def create_user(user: UserAuth):
-        user_in = User(
-            username=user.username,
-            email=user.email,
-            hashed_password=get_password(user.password)
-        )
-        await user_in.save()
-        return user_in
+        try:
+            user_in = User(
+                username=user.username,
+                email=user.email,
+                hashed_password=get_password(user.password)
+            )
+            await user_in.save()
+            return True
+        except:
+            return False
