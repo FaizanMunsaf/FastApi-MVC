@@ -15,12 +15,12 @@ user_router = APIRouter()
 #     return user
 
 
-# @user_router.post('/update', summary='Update User', response_model=UserOut)
-# async def update_user(data: UserUpdate, user: User = Depends(get_current_user)):
-#     try:
-#         return await UserController.update_user(user.user_id, data)
-#     except pymongo.errors.OperationFailure:
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST,
-#             detail="User does not exist"
-#         )
+@user_router.post('/update', summary='Update User')
+async def update_user(data: str):
+    # try:
+        return {"message":"await UserController.update_user(user.user_id, data)"}
+    # except pymongo.errors.OperationFailure:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="User does not exist"
+    #     )

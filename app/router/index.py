@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from app.infrastructure.security import JWTBearer
 from app.router.api_v1 import userroute
 from app.router.api_v1 import authroute
 # from app.api.api_v1.handlers import todo
@@ -7,4 +8,4 @@ from app.router.api_v1 import authroute
 router = APIRouter()
 
 router.include_router(authroute.auth_router, prefix='/auth', tags=["Auth"])
-router.include_router(userroute.user_router, prefix='/users', tags=["Users"])
+router.include_router(userroute.user_router, prefix='/users', tags=["Users"], dependencies=[Depends(JWTBearer())])

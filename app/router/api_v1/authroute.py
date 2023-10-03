@@ -1,6 +1,8 @@
 import json
-from fastapi import APIRouter, HTTPException, status
-from app.schemas.userschemas import UserAuth, UserLoginSchema, UserOut, UserUpdate
+from fastapi import APIRouter, Body, HTTPException, status
+from app.config.config import settings
+from app.infrastructure.security import signJWT
+from app.schemas.userschemas import TokenSchema, UserAuth, UserLoginSchema, UserOut, UserUpdate
 from fastapi import Depends
 from app.controller.usercontroller import UserController
 import pymongo
@@ -23,6 +25,23 @@ async def create_user(data: UserAuth):
             return  JSONResponse(content={"detail": "User with this email already exist", "data": data_, "status_code":status.HTTP_400_BAD_REQUEST})
         
         
-@auth_router.post('/login', summary="Create new user")
-async def login_user(data: UserLoginSchema):
-     pass
+# @auth_router.post('/login', summary="Create new user")
+# async def login_user(data: UserLoginSchema):
+#      user_ = await 
+
+
+@auth_router.post('/login', summary="Create access and refresh tokens for user", response_model=TokenSchema)
+async def login(user: UserLoginSchema = Body(...)):
+    user = await UserController.authenticate(email=user.email, password=user.password)
+    print(user)
+    print("4")
+    sign_value = signJWT(user, settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    print(sign_value)
+    
+    # if not user:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="Incorrect email or password"
+    #     )
+    
+    return sign_value

@@ -25,5 +25,8 @@ class UserUpdate(BaseModel):
 
 
 class UserLoginSchema(BaseModel):
-    email: EmailStr = Field(...)
-    password: str = Field(...)
+    email: EmailStr = Field(..., description="user email")
+    password: str = Field(..., min_length=5, max_length=24, description="user password")
+
+class TokenSchema(BaseModel):
+    access_token: str
