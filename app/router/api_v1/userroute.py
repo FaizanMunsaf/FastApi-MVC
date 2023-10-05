@@ -1,26 +1,35 @@
 from fastapi import APIRouter, HTTPException, status
+from fastapi.responses import JSONResponse
 from app.model.usermodel import User
-from app.schemas.userschemas import UserAuth, UserOut, UserUpdate
+from app.schemas.userschemas import UserExists, UserUpdate
 from fastapi import Depends
 from app.controller.usercontroller import UserController
 import pymongo
+
+from app.utils.getcurrentuser import get_current_user
+from app.utils.mongodbquery import check_user
 # from app.api.deps.user_deps import get_current_user
 
 
 user_router = APIRouter()
 
 
-# @user_router.get('/me', summary='Get details of currently logged in user', response_model=UserOut)
-# async def get_me(user: User = Depends(get_current_user)):
-#     return user
+@user_router.get('/getCurrentUser', summary='Get current Auth user')
+async def get_current_user_by_email(user: User = Depends(get_current_user)):
+    try:
+        print(user)
+        user_payload = {
+            "email" : user.email,
+            "username" : user.username
+        }
+        
+        return JSONResponse(status_code=202,
+                            content={"detail": "Current User Get Successfully", "data": user_payload, "status_code":status.HTTP_202_ACCEPTED})
+    except pymongo.errors.OperationFailure:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User does not exist"
+        )
 
 
-@user_router.post('/update', summary='Update User')
-async def update_user(data: str):
-    # try:
-        return {"message":"await UserController.update_user(user.user_id, data)"}
-    # except pymongo.errors.OperationFailure:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_400_BAD_REQUEST,
-    #         detail="User does not exist"
-    #     )
+

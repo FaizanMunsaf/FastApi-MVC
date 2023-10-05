@@ -25,7 +25,6 @@ class UserController:
     async def authenticate(email: str, password: str) -> Optional[User]:
         user = await UserController.get_user_by_email(email=email)
         print(user)
-        print("2")
         if not user:
             return None
         if not verify_password(password=password, hashed_pass=user.hashed_password):

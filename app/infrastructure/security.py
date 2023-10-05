@@ -20,14 +20,11 @@ class JWTBearer(HTTPBearer):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         if credentials:
             if not credentials.scheme == "Bearer":
-                print("1")
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
             if not self.verify_jwt(credentials.credentials):
-                print("2")
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
             return credentials.credentials
         else:
-            print("3")
             raise HTTPException(status_code=403, detail="Invalid authorization code.")
 
     def verify_jwt(self, jwtoken: str) -> bool:
@@ -95,7 +92,7 @@ def decodeJWT(token: str) -> dict:
         print(decoded_token)
         return decoded_token if decoded_token["exp"] >= time.time() else None
     except Exception as e:
-        # print(e)
+        print(e)
         return {}
     
 # def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) -> str:
@@ -115,5 +112,4 @@ def get_password(password: str) -> str:
 
 def verify_password(password: str, hashed_pass: str) -> bool:
     print(password)
-    print("3")
     return password_context.verify(password, hashed_pass)

@@ -1,31 +1,31 @@
 import secrets
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi import Depends, FastAPI, HTTPException
+
+from app.infrastructure.security import JWTBearer, decodeJWT
+from app.utils.mongodbquery import check_user
 
 app = FastAPI()
 
-security = HTTPBasic()
 
+# Get current user using OAuth2 authentication
+async def get_current_user(token: str = Depends(JWTBearer())):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    payload = decodeJWT(token)
+    if payload is None:
+        raise credentials_exception
+    user_payload = payload.get("data")
+    email = user_payload["email"]
+    if user_payload is None:
+        raise credentials_exception
+    user = await check_user(email)
+    print(user)
+    if user is None:
+        raise credentials_exception
+    return user
 
-def get_current_username(
-    credentials: Annotated[HTTPBasicCredentials, Depends(security)]
-):
-    current_username_bytes = credentials.username.encode("utf8")
-    correct_username_bytes = b"stanleyjobson"
-    is_correct_username = secrets.compare_digest(
-        current_username_bytes, correct_username_bytes
-    )
-    current_password_bytes = credentials.password.encode("utf8")
-    correct_password_bytes = b"swordfish"
-    is_correct_password = secrets.compare_digest(
-        current_password_bytes, correct_password_bytes
-    )
-    if not (is_correct_username and is_correct_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Basic"},
-        )
-    return credentials.username

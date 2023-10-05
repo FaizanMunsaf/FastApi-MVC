@@ -1,8 +1,10 @@
+from typing import Optional
+from app.model.usermodel import User
 from app.schemas.userschemas import UserLoginSchema
 
 
-def check_user(data: UserLoginSchema):
-    for user in "users":
-        if user.email == data.email and user.password == data.password:
-            return True
-    return False
+async def check_user(email: str) -> Optional[User]:
+    print(email)
+    user = await User.find_one(User.email == email)
+    print(user)
+    return user

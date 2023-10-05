@@ -26,6 +26,7 @@ class User(Document):
     def __eq__(self, other: object) -> bool:
         if isinstance(other, User):
             return self.email == other.email
+        print(other)
         return False
     
     @property
