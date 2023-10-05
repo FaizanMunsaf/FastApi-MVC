@@ -53,9 +53,9 @@ async def login(user: UserLoginSchema = Body(...)):
 
 
 @auth_router.post('/isUserExists', summary='User Exists or not')
-async def user_exists(email: UserExists):
-    print(email.email)
-    user_email = await check_user(email.email)
+async def user_exists(user: UserAuth):
+    print(user.email)
+    user_email = await check_user(user.email)
     print(user_email)
     if not user_email:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,
