@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 from app.model.usermodel import User
-from app.schemas.userschemas import UserExists, UserUpdate
+from app.schemas.userschemas import UserUpdate
 from fastapi import Depends
 from app.controller.usercontroller import UserController
 import pymongo
