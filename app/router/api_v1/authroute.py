@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, Body, HTTPException, status
 from app.config.config import settings
 from app.infrastructure.security import signJWT
-from app.schemas.userschemas import TokenSchema, UserAuth, UserExists, UserLoginSchema, UserOut, UserUpdate
+from app.schemas.userschemas import TokenSchema, UserAuth, UserLoginSchema, UserOut, UserUpdate
 from fastapi import Depends
 from app.controller.usercontroller import UserController
 import pymongo
