@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter, Body, HTTPException, status
 from app.config.config import settings
 from app.infrastructure.security import signJWT
-from app.schemas.userschemas import TokenSchema, UserAuth, UserLoginSchema, UserOut, UserUpdate
+from app.schemas.userschemas import TokenSchema, UserAuth, UserExists, UserLoginSchema, UserOut, UserUpdate
 from fastapi import Depends
 from app.controller.usercontroller import UserController
 import pymongo
@@ -53,7 +53,7 @@ async def login(user: UserLoginSchema = Body(...)):
 
 
 @auth_router.post('/isUserExists', summary='User Exists or not')
-async def user_exists(user: UserAuth):
+async def user_exists(user: UserExists):
     print(user.email)
     user_email = await check_user(user.email)
     print(user_email)
