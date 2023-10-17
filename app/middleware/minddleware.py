@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # App Configrations
 middleware_app = FastAPI(
 title=settings.PROJECT_NAME,
-openapi_url=f"{settings.API_V1_STR}openapi.json"
+openapi_url="/middleware_app"
 )
 
 # Add middlewares
