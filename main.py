@@ -6,7 +6,7 @@ from fastapi import FastAPI, Body, Depends
 # from app.infrastructure.exception import exception_app
 from app.infrastructure.exception import validation_exception_handler
 
-from app.middleware.minddleware import middleware_app
+from app.middleware.middleware import middleware_app
 # from app.infrastructure.exception import exception_app
 
 # Use for Config Settings
